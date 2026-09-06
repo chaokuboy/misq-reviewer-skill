@@ -1,0 +1,16 @@
+# 敏感信息 - 切勿上传
+tools/cookies.txt
+tools/zotero_import.py
+tools/zotero_fix_linked.py
+
+# 版权内容 - 用户自行合法获取，勿分发
+corpus/
+editorial_texts/
+*.ris
+*.jsonl
+
+# 系统/临时
+.DS_Store
+__pycache__/
+*.pyc
+node_modules/
