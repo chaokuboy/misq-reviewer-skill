@@ -122,6 +122,7 @@ misq-reviewer-skill/
 │   ├── knowledge/              9 份精读提炼（Editorial/方法论评论，供维度 8 溯源）
 │   ├── editorial_list.md       120 篇 Editorial/Commentary 清单（含 DOI）
 │   └── editorial_to_add.md     建议补充清单（去 EBSCO 抓取指引）
+├── examples/                   冒烟测试：两用例 + 通过标准（克隆后先跑）
 └── tools/
     ├── analyze_corpus.py       摘要统计（方法/热点分布）
     ├── extract_pdf_text.py     本地 PDF 文本提取
