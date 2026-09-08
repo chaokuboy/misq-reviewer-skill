@@ -1,11 +1,11 @@
 # MISQ Reviewer Skill 🎯
 
-**MIS Quarterly 期刊投稿小助手** —— 以 MISQ 主编 & 资深审稿人的视角，帮你：
+**MIS Quarterly 期刊投稿小助手** —— 基于 MISQ 历任主编 Editorial 与方法论评论**档案**的审稿视角审计，帮你：
 
 - **🤔 苏格拉底式追问**：梳理你的研究想法，把问题问到"能过 MISQ 审稿人那关"的程度
 - **🔬 投稿可行性诊断**：把你的论文方案贴进来，判断能否投 MISQ、创新点够不够、缺什么、该补哪些创新与实验
 
-> 无需联网订阅、无需每次重读文献——本包内置一份**凝练自真实数据的期刊画像**（519 篇论文摘要统计 + 6 篇主编 Editorial 全文精读提炼），让 AI 的判断有据可依，而不是凭印象发挥。
+> 无需联网订阅、无需每次重读文献——本包内置一份**凝练自真实数据的期刊画像**（519 篇论文摘要统计 + 2021–2026 主编 Editorial/方法论评论精读），让 AI 的判断**有据可依**：不足判断须逐条命中"维度 8 审稿人视角审计清单"并标注档案来源，而不是扮演审稿人凭印象发挥。
 
 ---
 
@@ -26,7 +26,8 @@
 ② 创新点评估     → 够不够、属于哪类贡献
 ③ 缺口清单       → 对照主编投稿指南逐条列出
 ④ 补充建议       → 创新角度 + 实验/方法 + 理论表述（每条标注依据）
-⑤ 风险预警       → 审稿人会挑的硬伤
+⑤ 不足审计       → 审稿人视角（档案锚定）：逐条命中维度 8 清单，标注来源 + 论文证据 + 严重度
+⑥ 开放问题       → 档案无直接依据、需向 SE/AE 确认的点（不计入可发表性判定）
 ```
 
 ---
@@ -34,8 +35,10 @@
 ## 🚀 安装（克隆后放入你的 AI 工具）
 
 ```bash
-git clone https://github.com/<你的用户名>/misq-reviewer-skill.git
+git clone https://github.com/chaokuboy/misq-reviewer-skill.git
 ```
+
+> ⚠️ **必须连同 `profiles/` 一起复制**（画像与审计清单在 profiles 里），只复制 `SKILL.md` 无效。
 
 ### Claude Code
 
@@ -62,14 +65,16 @@ cp -r misq-reviewer-skill ~/.claude/skills/misq-reviewer
 
 ```
 misq-reviewer-skill/
-├── SKILL.md                      ★ 助手定义（双模式指令，frontmatter 标准格式）
+├── SKILL.md                      ★ 助手定义（frontmatter 标准格式；档案化审计原则）
 ├── profiles/
-│   ├── misq.md                   ★ 期刊画像（核心锚点：定位/边界/贡献标准/拒稿Top10/创新地图/热点）
-│   ├── misq_submission_guide.md  ★ 主编投稿指南（6 篇 Editorial 凝练的 20 条建议等）
-│   ├── knowledge/                editorial 三篇精读提炼
-│   │   ├── _distill_burtonjones.md
-│   │   ├── _distill_susanbrown.md
-│   │   └── _distill_method2022.md
+│   ├── misq.md                   ★ 期刊画像（维度 0–8：定位/边界/贡献/拒稿Top10/创新/热点/审计清单）
+│   ├── misq_submission_guide.md  ★ 主编投稿指南（6 篇 Editorial 凝练的 20 条建议、审稿人视角）
+│   ├── knowledge/                9 份精读提炼（2021–2026 Editorial/方法论评论，供维度 8 溯源）
+│   │   ├── _distill_burtonjones.md      ├── _distill_susanbrown.md
+│   │   ├── _distill_method2022.md       ├── _distill_theory.md
+│   │   ├── _distill_innovation.md       ├── _distill_method.md
+│   │   ├── _distill_evolution50.md      ├── _distill_2025_innovation_quant.md
+│   │   └── _distill_2025_dei_green.md
 │   ├── editorial_list.md         Editorial/Commentary 索引（120 篇，含 DOI）
 │   └── editorial_to_add.md       建议补充清单与抓取指引
 └── tools/                        （可选）数据更新脚本
@@ -86,10 +91,18 @@ misq-reviewer-skill/
 | 数据源 | 处理 |
 |---|---|
 | MISQ 2020–2026 论文元数据（Crossref 官方） | 519 篇摘要 → 方法/主题词频统计（`analyze_corpus.py`） |
-| 主编 Editorial 全文（合理阅读） | 精读 6 篇 → 提炼投稿指南、理论贡献标准、拒稿理由、审稿人视角 |
+| 主编 Editorial 与方法论评论全文（2021–2026，合理阅读） | `misq_submission_guide.md` 6 篇（投稿指南/拒稿理由/审稿人视角）＋ `knowledge/` 9 份精读（理论/创新/方法合格线/构念/50 年趋势/DEI/可持续）→ 画像维度 0–8 |
 | 期刊运作信息 | 卸任主编总结、DEI 声明、主编问答 → 定位与边界 |
 
 画像更新：有新 Editorial / 新数据时，重跑 `tools/` 并修订 `profiles/misq.md` 即可，助手无需"重新训练"。
+
+---
+
+## ⚠️ 使用边界（诚实说明）
+
+- 不足判断的"档案"覆盖 **2021–2026** 的 Editorial/方法论评论；评估 2021 前的历史时点稿件时，2024–2026 的标准会自动标注为"当代镜头"而非当年硬伤。
+- 画像基于公开元数据统计与凝练阅读，**不代表** MISQ 编委/审稿人真实决策；诊断输出仅供参考。
+- 越"冷门"的跨学科稿件，档案覆盖越可能不足——此时助手会把这些点放入"⑥ 开放问题"而非妄断。
 
 ---
 
