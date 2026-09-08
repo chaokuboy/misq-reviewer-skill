@@ -43,6 +43,8 @@ git clone https://github.com/chaokuboy/misq-reviewer-skill.git
 ```
 
 > ⚠️ **必须连同 `profiles/` 一起复制**（画像与审计清单在 profiles 里），只复制 `SKILL.md` 无效。
+>
+> 🧪 **装好后先跑冒烟测试**（约 10 分钟）：见 [`examples/`](examples/README.md)，用内置用例对照预期输出，确认 skill 真的生效。
 
 ### Claude Code
 
@@ -94,6 +96,10 @@ misq-reviewer-skill/
 │   │   └── _distill_2025_dei_green.md
 │   ├── editorial_list.md         Editorial/Commentary 索引（120 篇，含 DOI）
 │   └── editorial_to_add.md       建议补充清单与抓取指引
+├── examples/                     冒烟测试（两用例 + 通过标准）
+│   ├── README.md                 测试协议与排查表
+│   ├── case_a_misq_diagnosis.md  模式②诊断用例 + 档案审计参考答案
+│   └── case_b_socratic.md        模式①追问用例 + 行为检查表
 └── tools/                        （可选）数据更新脚本
     ├── analyze_corpus.py         对摘要做方法/热点统计（重跑画像数据）
     ├── extract_pdf_text.py       PDF → 文本（本地使用）
