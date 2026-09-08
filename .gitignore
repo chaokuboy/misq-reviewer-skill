@@ -2,10 +2,12 @@
 tools/cookies.txt
 tools/zotero_import.py
 tools/zotero_fix_linked.py
+tools/zotero_sync_new.py
 
 # 版权内容 - 用户自行合法获取，勿分发
 corpus/
 editorial_texts/
+profiles/knowledge/_raw/
 *.ris
 *.jsonl
 
