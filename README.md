@@ -11,6 +11,10 @@
 
 ## ✨ 两种用法
 
+> 启动后（无论哪个工具），助手会**先请你选择功能**，再执行对应流程：
+> 选 **① 苏格拉底追问** → 四阶段提问帮你梳理想法；选 **② 投稿可行性诊断** → 按报告格式输出判断。
+> 需求已明确（如"这篇能不能投 MISQ"）可直接说，助手会自动进入对应模式。
+
 ### 1. 苏格拉底追问（梳理研究想法）
 
 > "帮我梳理一下这个研究想法……"
@@ -53,11 +57,23 @@ cp -r misq-reviewer-skill ~/.claude/skills/misq-reviewer
 
 复制到 `.cursor/skills/misq-reviewer/`（项目级）或全局 skills 目录，Cursor 会自动加载。
 
-### 其他 Agent / Coding 工具（DeepSeek、Codex、Windsurf 等）
+### Codex（OpenAI）
 
-大多数兼容 `SKILL.md` 规范的 agent 只需把整个目录放进其 skills/rules 目录。
-若你的工具不支持 skills 目录，可在系统提示词里加入一句话：
-"启动时先读取 `SKILL.md`，并按其中定义扮演 MISQ 投稿小助手。"
+```bash
+git clone https://github.com/chaokuboy/misq-reviewer-skill.git
+cd misq-reviewer-skill && codex
+```
+
+Codex 会自动读取仓库根目录的 [`AGENTS.md`](AGENTS.md) 并切到"MISQ 投稿小助手"模式：
+启动时会先请你选择 **① 苏格拉底追问** 还是 **② 投稿可行性诊断**，再执行对应流程；
+也可以直接问（如"分析这份论文能不能投 MISQ"，把 PDF/文本一起贴进来）。
+
+### 其他 Agent / Coding 工具（DeepSeek、Windsurf 等）
+
+大多数兼容 `SKILL.md` 规范的 agent 只需把整个目录放进其 skills/rules 目录；
+支持 `AGENTS.md` 的工具（Codex、Gemini CLI 等）克隆后在仓库目录启动即可自动加载。
+若你的工具两者都不支持，可在系统提示词里加入一句话：
+"启动时先读取 `SKILL.md`，按其中定义扮演 MISQ 投稿小助手。"
 
 ---
 
@@ -66,6 +82,7 @@ cp -r misq-reviewer-skill ~/.claude/skills/misq-reviewer
 ```
 misq-reviewer-skill/
 ├── SKILL.md                      ★ 助手定义（frontmatter 标准格式；档案化审计原则）
+├── AGENTS.md                     Codex 入口（克隆后在目录内启动即自动加载）
 ├── profiles/
 │   ├── misq.md                   ★ 期刊画像（维度 0–8：定位/边界/贡献/拒稿Top10/创新/热点/审计清单）
 │   ├── misq_submission_guide.md  ★ 主编投稿指南（6 篇 Editorial 凝练的 20 条建议、审稿人视角）
