@@ -116,6 +116,7 @@ description: >-
 misq-reviewer-skill/
 ├── SKILL.md                    本文件（核心指令，Claude Code / Cursor 等按 skills 规范加载）
 ├── AGENTS.md                   Codex 入口：自动加载 → 启动先让用户选功能再执行对应模式
+├── ARCHITECTURE.md             实现方案与交接文档（优化/修改任务必读；使用任务可不读）
 ├── profiles/
 │   ├── misq.md                 期刊画像（核心锚点）
 │   ├── misq_submission_guide.md 主编投稿指南（6 篇 Editorial 凝练）
