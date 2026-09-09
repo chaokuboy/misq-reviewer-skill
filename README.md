@@ -45,6 +45,10 @@ git clone https://github.com/chaokuboy/misq-reviewer-skill.git
 > ⚠️ **必须连同 `profiles/` 一起复制**（画像与审计清单在 profiles 里），只复制 `SKILL.md` 无效。
 >
 > 🧪 **装好后先跑冒烟测试**（约 10 分钟）：见 [`examples/`](examples/README.md)，用内置用例对照预期输出，确认 skill 真的生效。
+>
+> 🧑💻 **想继续优化这个 skill？** 完整实现方案、数据管线、画像机制、一致性与发布 SOP 见
+> [`ARCHITECTURE.md`](ARCHITECTURE.md)。用 Codex 时直接在仓库目录内说"优化这个 skill"，
+> 它会先读该文档再动手。
 
 ### Claude Code
 
@@ -85,6 +89,7 @@ Codex 会自动读取仓库根目录的 [`AGENTS.md`](AGENTS.md) 并切到"MISQ 
 misq-reviewer-skill/
 ├── SKILL.md                      ★ 助手定义（frontmatter 标准格式；档案化审计原则）
 ├── AGENTS.md                     Codex 入口（克隆后在目录内启动即自动加载）
+├── ARCHITECTURE.md               实现方案与项目交接（开发者/优化者先读；Codex 优化任务必读）
 ├── profiles/
 │   ├── misq.md                   ★ 期刊画像（维度 0–8：定位/边界/贡献/拒稿Top10/创新/热点/审计清单）
 │   ├── misq_submission_guide.md  ★ 主编投稿指南（6 篇 Editorial 凝练的 20 条建议、审稿人视角）
