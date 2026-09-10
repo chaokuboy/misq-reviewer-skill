@@ -1,100 +1,182 @@
-# MISQ 研究助手
+# 🔎 MISQ Reviewer
 
-用 MIS Quarterly 文献档案引导研究想法，或诊断投稿契合度与研究成熟度。
-核心是有来源、适用条件和稿件证据的追问；不预测录用概率。
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Agent Skill](https://img.shields.io/badge/Agent_Skill-misq--reviewer-6366f1)](SKILL.md)
+[![Language](https://img.shields.io/badge/Language-中文_%2F_English-0f766e)](#使用示例)
 
-## 使用
+**面向 MIS Quarterly 的研究讨论与审稿辅助 skill。**
 
-在仓库中让支持 AGENTS.md 的工具读取入口；支持 skills 的工具需把整个目录作为
-`misq-reviewer` 技能加载，不能只复制 SKILL.md。具体发现路径以宿主说明为准。
+让 AI 从期刊定位、理论贡献和证据要求出发，帮你梳理研究想法、挑战创新主张、改进研究设计，并形成有来源的投稿诊断。
 
-- “帮我梳理这个研究想法” → 一次一个关键问题，根据回答推进。
-- “诊断这份方案能否投 MISQ” → 六段诊断：契合度/成熟度、创新、缺口/待确认、下一步、证据审计、开放问题。
-- 需求不明确时介绍两种功能；“怎么补”直接给建议，不强制重新选模式。
+[快速开始](#快速开始) · [使用示例](#使用示例) · [工作方式](#工作方式) · [目录结构](#目录结构) · [进阶使用](#进阶使用)
 
-不要求每次读完全部论文。静态画像可直接用；本地检索与项目记忆按需启用：
+<a id="适合什么时候用"></a>
 
-```bash
-python3 tools/research_assistant.py build
-python3 tools/research_assistant.py search '机制 竞争解释 mediation'
-python3 tools/research_assistant.py project new my-study
-python3 tools/research_assistant.py project show my-study
-```
+## 🎯 适合什么时候用
 
-每个项目固定知识版本，保存用修订号检查，换聊天后恢复已问问题与下一步。
-完整命令见 [本地工具](references/local-tools.md)。
+| 你的研究阶段 | 这个 skill 帮你做什么 |
+|---|---|
+| 只有一个初步想法 | 用苏格拉底式追问明确研究对象、现象和关键问题，一次推进一个主问题 |
+| 想判断创新在哪里 | 对照已有研究，区分作者主张、已有证据与尚待验证的贡献 |
+| 正在选择研究设计 | 按研究范式检查方法与主张是否匹配，结合数据、时间和资源比较路线 |
+| 准备投稿 MISQ | 分别诊断期刊契合度和研究成熟度，指出最值得优先解决的缺口 |
+| 收到审稿意见 | 整理意见、检查实际修改与回应是否对应，准备下一轮修订 |
+| 需要继续上次讨论 | 利用提供的项目摘要或可用的本地记录，接着推进已明确的问题 |
 
-## 连接本地 Zotero
+<a id="快速开始"></a>
 
-打开 Zotero 并启用本地 API 后运行：
+## 🚀 快速开始
 
-```bash
-python3 tools/research_assistant.py collections
-python3 tools/research_assistant.py sync-zotero <实际合集键>
-python3 tools/research_assistant.py build
-```
-
-只读选定合集的题录与已索引 PDF 文本，不需要 Web API key，不修改附件。
-连接不可用时不会更新；未索引/不可读附件进入失败清单。可用 `--extract-pdfs` 从本地 PDF 后备提取并保留物理页码（需安装 pypdf，见本地工具）；尚无 OCR。
-数据只写 `.local/`，不提交 GitHub。宿主若使用云端模型，读入的证据片段仍进入模型上下文。
-
-## 知识与限制
-
-- 画像维度 0–8、投稿指南、九份旧蒸馏提供检索入口；本轮未逐页核验原文，不能当已证实政策。
-- 稳定审计 ID D8-01 至 D8-15，四态：已有支持、待确认、存在缺口、不适用。
-- 2020–2026 的 519 条历史题录统计是标题＋摘要关键词命中、多标签，并非方法偏好或录用率。
-- 标准、案例和综合推断分开；日期比评估时点晚才用“当代镜头”；资料未提供不等于研究未做。
-- 本地检索是 SQLite FTS5 词项搜索，不是向量 RAG。知识卡由模型辅助整理、人工核验。
-- 本地已有 6 张标准候选卡和 4 张案例卡，带片段/hash/适用性/局限及模型复核；仍待人工核验。没有自动训练或自动更新计划。
-
-## 扩展工作台
-
-现在还支持：文献对照、创新路径比较、主张证据检查、按范式审查方法、审稿模拟、
-修改回复、两版比较、导师会前摘要和研究方向分支。模型按需执行，不要求每次跑完整套。
+### 1. 克隆仓库
 
 ```bash
-python3 tools/research_assistant.py search '患者自主性' --expand --year-from 2022 --year-to 2026 --kind pdf_fulltext --per-source 1
-python3 tools/research_assistant.py packet '患者自主性' --year-from 2022 --year-to 2026
-python3 tools/research_assistant.py doctor
-python3 tools/research_assistant.py cards-audit
-python3 tools/research_assistant.py project-list
+git clone https://github.com/chaokuboy/misq-reviewer-skill.git misq-reviewer
+cd misq-reviewer
 ```
 
-支持文档上下文读取、知识版本差异、项目分支/导出和 PDF 提取缓存，详见 [操作文档](references/local-tools.md)。
-[详细审查](examples/REVIEW_V2.md) 区分已实现能力与剩余不足；小词表扩展不是完整语义检索，
-原文提取不等于完成知识核验，审稿模拟不代表真实编辑意见。
+整个仓库就是一个 skill，入口在根目录的 [`SKILL.md`](SKILL.md)。保留完整目录结构，安装目录名使用 `misq-reviewer`，与 skill 名称一致。
 
-## 证据质量与评测
+### 2. 让 Agent 加载 skill
 
-新增 [质量工作台](references/quality-lab.md)：知识卡语义复核记录、8 场景教师盲评工具、
-多查询融合、检索回归、PDF 表格/页图/OCR、19 期目录对账、Crossref 更新通知检查。
-教师评分尚未开展；没有将模型自评或源码测试当成效果证据。
-本轮真实结果与剩余边界见 [第三轮验证记录](examples/QUALITY_V3.md)。
+如果你的 Agent 支持原生 skills，将该目录放入它识别的 skill 目录，并按宿主要求重新加载。
 
-当前版本已运行6案双条件和两组五轮对话，另做3案修订后复测；独立模型评审发现并复核了
-审计ID出处错配。详见 [行为评测记录](examples/BEHAVIOR_R1.md)。这是合成开发案例的
-行为观察，不是教师校准或优于普通助手的证明。加入研究路线检查后，当前自动测试46项通过。
+也可以直接用 Agent 打开克隆后的目录，在新对话中发送：
 
-## 维护与验证
+```text
+请读取当前目录的 SKILL.md，并按其中的流程使用 misq-reviewer。
+我的研究想法是：……
+请先帮我明确最关键的问题，一次问一个主问题。
+```
 
-研究想法与资源可按 [研究推进主线](references/research-pipeline.md) 完成最近邻对照、
-设计路线比较和判断修订。新增 `plan-check` 检查声明的资源依赖；不将口头承诺视为已获得数据。
-候选A的本地试跑和验证边界见 [试跑记录](examples/PILOT_PIPELINE.md)。
+> [!TIP]
+> 到这里就可以开始使用。无需先安装 Python、运行脚本或连接 Zotero。
 
-先读 [ARCHITECTURE.md](ARCHITECTURE.md)。来源纪律见 [evidence.md](references/evidence.md)，
-对话流程见 [dialogue.md](references/dialogue.md)。旧版方案与文件保存在 Git 历史。
+不同 Agent 的自动发现路径不同；克隆到普通目录时，显式读取 `SKILL.md` 即可开始本次对话。没有文件读取能力的聊天界面，见[加载说明](docs/GETTING_STARTED.md)。
+
+### 3. 直接描述你的任务
+
+加载后用自然语言交流即可。不需要先填完整表格，也不必每次重新介绍项目背景；已有记录需提供给当前对话。
+
+<a id="使用示例"></a>
+
+## 💬 使用示例
+
+### 梳理研究想法
+
+```text
+使用 misq-reviewer。我想研究 AI 导诊建议如何影响患者自主性，
+目前只有访谈机会，还没有确定理论。请用逐轮追问帮我梳理。
+```
+
+助手会选择当前最关键的不确定性继续问。例如：你说的自主性，是选择更多，还是能理解并拒绝系统建议？这只是自拟问法示例，实际问题随你的回答变化。
+
+### 评价创新与投稿契合度
+
+```text
+使用 misq-reviewer 诊断下面的研究方案。
+请分别说明 MISQ 契合度、研究成熟度和创新主张的证据，
+把已确认缺口与需要我补充说明的内容分开。
+
+【研究问题、已有研究、方法和现有结果】
+```
+
+诊断包含六部分：**契合度与成熟度 → 创新点评估 → 缺口与待确认 → 下一步建议 → 证据审计 → 开放问题与边界**。
+
+### 比较可执行的研究路线
+
+```text
+使用 misq-reviewer 比较这两个创新方向。
+我能获得访谈和匿名使用日志，研究周期六个月，无法随机分组。
+请比较各自的知识增量、关键假设、最低必要证据和下一步行动。
+
+【方向 A】
+【方向 B】
+```
+
+更多任务包括相邻文献对照、方法审查、模拟审稿、修改回复和会前摘要，见[研究工作流程](references/research-workflows.md)。
+
+<a id="工作方式"></a>
+
+## 🧭 工作方式
+
+```text
+研究材料 → 明确问题 → 对照贡献 → 挑战假设 → 选择下一步
+                ↑                    │
+                └── 根据回答调整 ────┘
+```
+
+- **有方向的追问。** 用 MISQ 画像和相关来源帮助选择问题，根据回答推进、回退或暂停。
+- **按范式判断。** 区分行为研究、质性、设计科学和计量等研究，不对所有方案套同一套方法要求。
+- **把判断落到证据。** 区分编辑观点、方法论、发表案例和综合推断；资料未提供不等于研究存在缺陷。
+- **按需加载。** `SKILL.md` 定义流程，`profiles/` 提供期刊档案，`references/` 提供专项规则；无需每轮重读全部文献。
+
+仓库自带 MISQ 维度 0–8 的画像、投稿指南和九份历史文献蒸馏。原文阅读成果用于指导讨论，不代表模型已被微调，也不代表所有摘要都已逐页核验。
+
+<a id="目录结构"></a>
+
+## 🗂️ 目录结构
+
+```text
+misq-reviewer/
+├── SKILL.md              # Agent 正式入口：触发场景、流程与判断纪律
+├── README.md             # 项目介绍与使用示例
+├── AGENTS.md             # 支持该约定的仓库 Agent 入口
+├── profiles/             # MISQ 画像、投稿指南与历史蒸馏
+├── references/           # 证据规则、追问流程与专项任务
+├── tools/                # 可选：文献检索、项目状态和质量工具
+├── docs/                 # 加载说明、FAQ 与详细文件导航
+├── examples/             # 用例与历史验证记录
+├── evaluations/          # 评测协议和开发场景
+├── tests/                # 工具回归测试
+├── ARCHITECTURE.md       # 实现与维护说明
+├── CONTRIBUTING.md       # 贡献约定
+└── LICENSE
+```
+
+这是单 skill 仓库，无需再套一层 `skills/`。`tools/` 是可选辅助代码，日常使用从 `SKILL.md` 开始。完整说明见[文件导航](docs/FILE_MAP.md)。
+
+<a id="进阶使用"></a>
+
+## 🧰 进阶使用
+
+需要自己的全文证据或跨对话项目记录时，再按需启用：
+
+| 能力 | 文档 |
+|---|---|
+| 接入自己的 Zotero、检索文献、保存与恢复项目 | [本地工具](references/local-tools.md) |
+| 整理知识卡、复核来源、查看 PDF/OCR 候选与出版更新 | [质量工作台](references/quality-lab.md) |
+| 从资源约束推进到研究路线 | [研究推进主线](references/research-pipeline.md) |
+| 组织对照运行和教师评分 | [评测协议](evaluations/README.md) |
+
+辅助工具由具备终端能力的 Agent 或使用者按文档运行。Python 等依赖只属于这些可选功能，不是加载 skill 的前置条件。
+
+<a id="来源与边界"></a>
+
+## 📚 来源与边界
+
+> [!NOTE]
+> 公开仓库不含期刊全文、开发者的私有知识卡或个人项目。需要全文对照时，请接入自己有权使用的文献；历史报告里的资料数量不代表新安装的覆盖范围。
+
+本 skill 提供审稿辅助与创新讨论，不预测录用概率，不代表 MISQ 编辑意见。目前已有离线工具测试和合成案例模型运行，**仍未通过真实教师校准，不能将自主评分当作录用标准**。验证范围见[记录](examples/README.md)。
+
+如果使用云端模型，提供给模型的稿件和文献片段可能进入其上下文；本地索引不改变宿主的数据处理方式。
+
+<a id="更新与贡献"></a>
+
+## 🤝 更新与贡献
+
+在克隆目录中更新：
 
 ```bash
-python3 -m unittest discover -s tests -v
+git pull --ff-only
 ```
 
-[examples](examples/README.md) 包含多轮行为协议。脚本测试、人工走查与独立模型盲测分开报告，
-不以“已发表所以应该通过”校准答案。
+有自己的修改时先检查并保留改动。可选工具生成的 `.local/` 不随 Git 同步，迁移时另行备份。
 
-本项目与 MISQ 无隶属关系，输出不代表编辑决定。代码与原创凝练按 [MIT](LICENSE) 分发；
-第三方原文权利不因本项目许可证改变，公开包不含期刊全文。
+欢迎通过 [Issues](https://github.com/chaokuboy/misq-reviewer-skill/issues) 提供脱敏失败案例或改进建议。修改技能前阅读 [ARCHITECTURE.md](ARCHITECTURE.md)，提交约定见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-### 证据闭环补丁（2026-09-10）
-证据包固定单一知识版本，接入版本绑定的语义审核与 evidence_use 状态；出版通知报告保留
-按内容去重的历史，防止后续无命中覆盖旧警报。详见 [质量工作台](references/quality-lab.md)
-及 [本轮验证](examples/QUALITY_V4.md)。33 项软件测试通过，不代表追问效果已获教师验证。
+<a id="license"></a>
+
+## 📄 License
+
+[MIT](LICENSE)。第三方论文及原文的权利不因本项目许可证改变。
