@@ -1,5 +1,6 @@
 # MISQ 理论方法论评论精炼：MISQ 认可什么创新/理论贡献
 > 出处标记：①《Who Needs Theory?》(King 2021) ②《Focusing on Programmatic High Impact IS Research, Not Theory》(Ram & Goes 2021) ③《Everything Old Can Be New Again: Reinvigorating Theory Borrowing》(Jiang et al. 2022)。均为 MISQ 理论特刊的方法论评论。
+> 核验状态：旧版阅读蒸馏，尚未在本轮逐页比对原文。使用时遵守 `references/evidence.md`；其中强制措辞不能直接当期刊政策，须核验适用条件。
 
 ## 1. 理论在 IS 研究的角色——是否必须
 - 人人需要理论，数据与理论缺一不可；但把"有无理论"当拒稿尺子、拔高理论会吓退研究者①。理论本质是"洞见"；先有洞见、理论在后，放宽"显式建理论"的约束反而更易产出真理论①。

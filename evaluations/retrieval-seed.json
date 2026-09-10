@@ -1,0 +1,8 @@
+{
+  "label_status":"development_seed_targets_selected_from_read_sources_not_exhaustive_relevance_labels",
+  "queries":[
+    {"id":"patient-autonomy","query":"患者自主性","alternatives":["mHealth patient self management randomized"],"relevant_keys":["MBAM5ER2"]},
+    {"id":"interleaving","query":"认知负荷相关交错学习","alternatives":["related interleaving cognitive load"],"relevant_keys":["58DFD3QN"]},
+    {"id":"qualitative-reflexivity","query":"现象导向的质性反思","alternatives":["qualitative phenomenon problematization scripts reflexivity"],"relevant_keys":["4ZVWMHA9"]}
+  ]
+}

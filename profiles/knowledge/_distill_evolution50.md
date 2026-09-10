@@ -1,5 +1,6 @@
 # 50 年综述精读提炼（Susan Brown 2026，MISQ 50 周年）
 
+> 核验状态：旧版阅读蒸馏，尚未在本轮逐页比对原文。使用时遵守 `references/evidence.md`；其中强制措辞不能直接当期刊政策，须核验适用条件。
 > 来源：MISQ Vol.50 No.2 (2026) Editor's Comments《The Evolution of Research in MIS Quarterly Over Five Decades》
 > 方法：利用 Claude 辅助，对 MISQ 1977–2025 全部 1,963 篇研究论文做文本分析（3 年滚动平均、生命周期指标）。
 
