@@ -1,5 +1,6 @@
 # Burton-Jones 两篇编者按精读提炼（DEI 立场声明 · Tuum Est）
 
+> 核验状态：旧版阅读蒸馏，尚未在本轮逐页比对原文。使用时遵守 `references/evidence.md`；其中强制措辞不能直接当期刊政策，须核验适用条件。
 基于文本实际内容提炼：2021 年 12 月《Creating Our Editorial Board Position Statement on Diversity, Equity, and Inclusion》与 2023 年 12 月《Tuum Est》（MISQ 主编 Burton-Jones 卸任总结）。
 
 ### 1. DEI 立场声明要点

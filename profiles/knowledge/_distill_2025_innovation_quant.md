@@ -1,5 +1,6 @@
 # 2025 MISQ 编者按蒸馏：创新认可与方法要求
 
+> 核验状态：旧版阅读蒸馏，尚未在本轮逐页比对原文。使用时遵守 `references/evidence.md`；其中强制措辞不能直接当期刊政策，须核验适用条件。
 > 来源：《Rebalancing Novelty with Rigor and Relevance in IS Research》(MISQ 49:3, 2025，Sun/Wen/Thatcher/Chau/Susan Brown) 与《Quantitative Behavioral IS Research》(MISQ 49:1, 2025，Maruping/Yin/Chen/Kankanhalli/Burton-Jones/Susan Brown)。
 
 ## 1. Novelty 与 Rigor/Relevance 的平衡（49:3）

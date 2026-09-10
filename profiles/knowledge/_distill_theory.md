@@ -1,5 +1,6 @@
 # MISQ 理论方法论评论三篇提炼
 出处：NG=Next-Generation IS Theorizing(2021)；FL=Theories in Flux(2021)；CO=When Constructs Become Obsolete(2022)。
+> 核验状态：旧版阅读蒸馏，尚未在本轮逐页比对原文。使用时遵守 `references/evidence.md`；其中强制措辞不能直接当期刊政策，须核验适用条件。
 
 ### 1. MISQ 认可的理论贡献（这三篇观点）
 - 理论贡献＝带来"显著思维转变、开辟新研究线"的思考，而非追逐热点术语。认可四条路径：新理论替换旧理论；为新现象发明新理论；大幅重构既有理论；显著扩展既有理论至新领域（NG）。

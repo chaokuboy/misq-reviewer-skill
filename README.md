@@ -1,148 +1,100 @@
-# MISQ Reviewer Skill 🎯
+# MISQ 研究助手
 
-**MIS Quarterly 期刊投稿小助手** —— 基于 MISQ 历任主编 Editorial 与方法论评论**档案**的审稿视角审计，帮你：
+用 MIS Quarterly 文献档案引导研究想法，或诊断投稿契合度与研究成熟度。
+核心是有来源、适用条件和稿件证据的追问；不预测录用概率。
 
-- **🤔 苏格拉底式追问**：梳理你的研究想法，把问题问到"能过 MISQ 审稿人那关"的程度
-- **🔬 投稿可行性诊断**：把你的论文方案贴进来，判断能否投 MISQ、创新点够不够、缺什么、该补哪些创新与实验
+## 使用
 
-> 无需联网订阅、无需每次重读文献——本包内置一份**凝练自真实数据的期刊画像**（519 篇论文摘要统计 + 2021–2026 主编 Editorial/方法论评论精读），让 AI 的判断**有据可依**：不足判断须逐条命中"维度 8 审稿人视角审计清单"并标注档案来源，而不是扮演审稿人凭印象发挥。
+在仓库中让支持 AGENTS.md 的工具读取入口；支持 skills 的工具需把整个目录作为
+`misq-reviewer` 技能加载，不能只复制 SKILL.md。具体发现路径以宿主说明为准。
 
----
+- “帮我梳理这个研究想法” → 一次一个关键问题，根据回答推进。
+- “诊断这份方案能否投 MISQ” → 六段诊断：契合度/成熟度、创新、缺口/待确认、下一步、证据审计、开放问题。
+- 需求不明确时介绍两种功能；“怎么补”直接给建议，不强制重新选模式。
 
-## ✨ 两种用法
-
-> 启动后（无论哪个工具），助手会**先请你选择功能**，再执行对应流程：
-> 选 **① 苏格拉底追问** → 四阶段提问帮你梳理想法；选 **② 投稿可行性诊断** → 按报告格式输出判断。
-> 需求已明确（如"这篇能不能投 MISQ"）可直接说，助手会自动进入对应模式。
-
-### 1. 苏格拉底追问（梳理研究想法）
-
-> "帮我梳理一下这个研究想法……"
-
-助手会依次用 **Clarity（澄清）→ Prompt（引导）→ Challenge（质疑）→ Evaluate（评价）** 四阶段提问，每个问题都锚定 MISQ 的真实审稿标准（如"去掉 IS 结论还成立吗？""这是 gap spotting 吗？"）。
-
-### 2. 投稿可行性诊断（评估论文方案）
-
-贴入你的方案（题目、研究问题、理论、方法/算法、数据、创新点表述），助手输出：
-
-```
-① 投稿可行性判断 → 可以冲 MISQ / 补 X 后可以 / 更像 CS 顶会或他刊
-② 创新点评估     → 够不够、属于哪类贡献
-③ 缺口清单       → 对照主编投稿指南逐条列出
-④ 补充建议       → 创新角度 + 实验/方法 + 理论表述（每条标注依据）
-⑤ 不足审计       → 审稿人视角（档案锚定）：逐条命中维度 8 清单，标注来源 + 论文证据 + 严重度
-⑥ 开放问题       → 档案无直接依据、需向 SE/AE 确认的点（不计入可发表性判定）
-```
-
----
-
-## 🚀 安装（克隆后放入你的 AI 工具）
+不要求每次读完全部论文。静态画像可直接用；本地检索与项目记忆按需启用：
 
 ```bash
-git clone https://github.com/chaokuboy/misq-reviewer-skill.git
+python3 tools/research_assistant.py build
+python3 tools/research_assistant.py search '机制 竞争解释 mediation'
+python3 tools/research_assistant.py project new my-study
+python3 tools/research_assistant.py project show my-study
 ```
 
-> ⚠️ **必须连同 `profiles/` 一起复制**（画像与审计清单在 profiles 里），只复制 `SKILL.md` 无效。
->
-> 🧪 **装好后先跑冒烟测试**（约 10 分钟）：见 [`examples/`](examples/README.md)，用内置用例对照预期输出，确认 skill 真的生效。
->
-> 🧑💻 **想继续优化这个 skill？** 完整实现方案、数据管线、画像机制、一致性与发布 SOP 见
-> [`ARCHITECTURE.md`](ARCHITECTURE.md)。用 Codex 时直接在仓库目录内说"优化这个 skill"，
-> 它会先读该文档再动手。
+每个项目固定知识版本，保存用修订号检查，换聊天后恢复已问问题与下一步。
+完整命令见 [本地工具](references/local-tools.md)。
 
-### Claude Code
+## 连接本地 Zotero
+
+打开 Zotero 并启用本地 API 后运行：
 
 ```bash
-# 放到全局 skills 目录
-mkdir -p ~/.claude/skills
-cp -r misq-reviewer-skill ~/.claude/skills/misq-reviewer
-# 或项目级：cp -r 到 <项目>/.claude/skills/misq-reviewer
+python3 tools/research_assistant.py collections
+python3 tools/research_assistant.py sync-zotero <实际合集键>
+python3 tools/research_assistant.py build
 ```
 
-### Cursor
+只读选定合集的题录与已索引 PDF 文本，不需要 Web API key，不修改附件。
+连接不可用时不会更新；未索引/不可读附件进入失败清单。可用 `--extract-pdfs` 从本地 PDF 后备提取并保留物理页码（需安装 pypdf，见本地工具）；尚无 OCR。
+数据只写 `.local/`，不提交 GitHub。宿主若使用云端模型，读入的证据片段仍进入模型上下文。
 
-复制到 `.cursor/skills/misq-reviewer/`（项目级）或全局 skills 目录，Cursor 会自动加载。
+## 知识与限制
 
-### Codex（OpenAI）
+- 画像维度 0–8、投稿指南、九份旧蒸馏提供检索入口；本轮未逐页核验原文，不能当已证实政策。
+- 稳定审计 ID D8-01 至 D8-15，四态：已有支持、待确认、存在缺口、不适用。
+- 2020–2026 的 519 条历史题录统计是标题＋摘要关键词命中、多标签，并非方法偏好或录用率。
+- 标准、案例和综合推断分开；日期比评估时点晚才用“当代镜头”；资料未提供不等于研究未做。
+- 本地检索是 SQLite FTS5 词项搜索，不是向量 RAG。知识卡由模型辅助整理、人工核验。
+- 本地已有 6 张标准候选卡和 4 张案例卡，带片段/hash/适用性/局限及模型复核；仍待人工核验。没有自动训练或自动更新计划。
+
+## 扩展工作台
+
+现在还支持：文献对照、创新路径比较、主张证据检查、按范式审查方法、审稿模拟、
+修改回复、两版比较、导师会前摘要和研究方向分支。模型按需执行，不要求每次跑完整套。
 
 ```bash
-git clone https://github.com/chaokuboy/misq-reviewer-skill.git
-cd misq-reviewer-skill && codex
+python3 tools/research_assistant.py search '患者自主性' --expand --year-from 2022 --year-to 2026 --kind pdf_fulltext --per-source 1
+python3 tools/research_assistant.py packet '患者自主性' --year-from 2022 --year-to 2026
+python3 tools/research_assistant.py doctor
+python3 tools/research_assistant.py cards-audit
+python3 tools/research_assistant.py project-list
 ```
 
-Codex 会自动读取仓库根目录的 [`AGENTS.md`](AGENTS.md) 并切到"MISQ 投稿小助手"模式：
-启动时会先请你选择 **① 苏格拉底追问** 还是 **② 投稿可行性诊断**，再执行对应流程；
-也可以直接问（如"分析这份论文能不能投 MISQ"，把 PDF/文本一起贴进来）。
+支持文档上下文读取、知识版本差异、项目分支/导出和 PDF 提取缓存，详见 [操作文档](references/local-tools.md)。
+[详细审查](examples/REVIEW_V2.md) 区分已实现能力与剩余不足；小词表扩展不是完整语义检索，
+原文提取不等于完成知识核验，审稿模拟不代表真实编辑意见。
 
-### 其他 Agent / Coding 工具（DeepSeek、Windsurf 等）
+## 证据质量与评测
 
-大多数兼容 `SKILL.md` 规范的 agent 只需把整个目录放进其 skills/rules 目录；
-支持 `AGENTS.md` 的工具（Codex、Gemini CLI 等）克隆后在仓库目录启动即可自动加载。
-若你的工具两者都不支持，可在系统提示词里加入一句话：
-"启动时先读取 `SKILL.md`，按其中定义扮演 MISQ 投稿小助手。"
+新增 [质量工作台](references/quality-lab.md)：知识卡语义复核记录、8 场景教师盲评工具、
+多查询融合、检索回归、PDF 表格/页图/OCR、19 期目录对账、Crossref 更新通知检查。
+教师评分尚未开展；没有将模型自评或源码测试当成效果证据。
+本轮真实结果与剩余边界见 [第三轮验证记录](examples/QUALITY_V3.md)。
 
----
+当前版本已运行6案双条件和两组五轮对话，另做3案修订后复测；独立模型评审发现并复核了
+审计ID出处错配。详见 [行为评测记录](examples/BEHAVIOR_R1.md)。这是合成开发案例的
+行为观察，不是教师校准或优于普通助手的证明。加入研究路线检查后，当前自动测试46项通过。
 
-## 📁 文件结构
+## 维护与验证
 
-```
-misq-reviewer-skill/
-├── SKILL.md                      ★ 助手定义（frontmatter 标准格式；档案化审计原则）
-├── AGENTS.md                     Codex 入口（克隆后在目录内启动即自动加载）
-├── ARCHITECTURE.md               实现方案与项目交接（开发者/优化者先读；Codex 优化任务必读）
-├── profiles/
-│   ├── misq.md                   ★ 期刊画像（维度 0–8：定位/边界/贡献/拒稿Top10/创新/热点/审计清单）
-│   ├── misq_submission_guide.md  ★ 主编投稿指南（6 篇 Editorial 凝练的 20 条建议、审稿人视角）
-│   ├── knowledge/                9 份精读提炼（2021–2026 Editorial/方法论评论，供维度 8 溯源）
-│   │   ├── _distill_burtonjones.md      ├── _distill_susanbrown.md
-│   │   ├── _distill_method2022.md       ├── _distill_theory.md
-│   │   ├── _distill_innovation.md       ├── _distill_method.md
-│   │   ├── _distill_evolution50.md      ├── _distill_2025_innovation_quant.md
-│   │   └── _distill_2025_dei_green.md
-│   ├── editorial_list.md         Editorial/Commentary 索引（120 篇，含 DOI）
-│   └── editorial_to_add.md       建议补充清单与抓取指引
-├── examples/                     冒烟测试（两用例 + 通过标准）
-│   ├── README.md                 测试协议与排查表
-│   ├── case_a_misq_diagnosis.md  模式②诊断用例 + 档案审计参考答案
-│   └── case_b_socratic.md        模式①追问用例 + 行为检查表
-└── tools/                        （可选）数据更新脚本
-    ├── analyze_corpus.py         对摘要做方法/热点统计（重跑画像数据）
-    ├── extract_pdf_text.py       PDF → 文本（本地使用）
-    ├── fetch_misq.py             从 Crossref 增量拉 MISQ 元数据
-    └── download_fulltext.py      批量下全文（需自备 EBSCO 机构 cookie）
+研究想法与资源可按 [研究推进主线](references/research-pipeline.md) 完成最近邻对照、
+设计路线比较和判断修订。新增 `plan-check` 检查声明的资源依赖；不将口头承诺视为已获得数据。
+候选A的本地试跑和验证边界见 [试跑记录](examples/PILOT_PIPELINE.md)。
+
+先读 [ARCHITECTURE.md](ARCHITECTURE.md)。来源纪律见 [evidence.md](references/evidence.md)，
+对话流程见 [dialogue.md](references/dialogue.md)。旧版方案与文件保存在 Git 历史。
+
+```bash
+python3 -m unittest discover -s tests -v
 ```
 
----
+[examples](examples/README.md) 包含多轮行为协议。脚本测试、人工走查与独立模型盲测分开报告，
+不以“已发表所以应该通过”校准答案。
 
-## 🔍 画像怎么来的（方法透明）
+本项目与 MISQ 无隶属关系，输出不代表编辑决定。代码与原创凝练按 [MIT](LICENSE) 分发；
+第三方原文权利不因本项目许可证改变，公开包不含期刊全文。
 
-| 数据源 | 处理 |
-|---|---|
-| MISQ 2020–2026 论文元数据（Crossref 官方） | 519 篇摘要 → 方法/主题词频统计（`analyze_corpus.py`） |
-| 主编 Editorial 与方法论评论全文（2021–2026，合理阅读） | `misq_submission_guide.md` 6 篇（投稿指南/拒稿理由/审稿人视角）＋ `knowledge/` 9 份精读（理论/创新/方法合格线/构念/50 年趋势/DEI/可持续）→ 画像维度 0–8 |
-| 期刊运作信息 | 卸任主编总结、DEI 声明、主编问答 → 定位与边界 |
-
-画像更新：有新 Editorial / 新数据时，重跑 `tools/` 并修订 `profiles/misq.md` 即可，助手无需"重新训练"。
-
----
-
-## ⚠️ 使用边界（诚实说明）
-
-- 不足判断的"档案"覆盖 **2021–2026** 的 Editorial/方法论评论；评估 2021 前的历史时点稿件时，2024–2026 的标准会自动标注为"当代镜头"而非当年硬伤。
-- 画像基于公开元数据统计与凝练阅读，**不代表** MISQ 编委/审稿人真实决策；诊断输出仅供参考。
-- 越"冷门"的跨学科稿件，档案覆盖越可能不足——此时助手会把这些点放入"⑥ 开放问题"而非妄断。
-
----
-
-## ⚖️ 版权与免责
-
-- **本仓库只含凝练知识与分析成果**（原创），不含任何 MISQ 论文全文 PDF —— 全文版权归 MIS Quarterly 与作者。
-- Editorial 内容以**引用/提炼**形式呈现，属于合理使用范畴；如需引用原文请标注出处（DOI 见 `editorial_list.md`）。
-- 诊断结果仅供参考，不构成投稿录用承诺。
-- 本人与 MIS Quarterly 无隶属关系；本工具为独立学术辅助项目。
-
----
-
-## 📄 License
-
-MIT © 2026 —— 详见 [LICENSE](LICENSE)。
+### 证据闭环补丁（2026-09-10）
+证据包固定单一知识版本，接入版本绑定的语义审核与 evidence_use 状态；出版通知报告保留
+按内容去重的历史，防止后续无命中覆盖旧警报。详见 [质量工作台](references/quality-lab.md)
+及 [本轮验证](examples/QUALITY_V4.md)。33 项软件测试通过，不代表追问效果已获教师验证。

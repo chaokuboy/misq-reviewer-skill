@@ -16,3 +16,6 @@ profiles/knowledge/_raw/
 __pycache__/
 *.pyc
 node_modules/
+
+# 本地知识索引、卡片、Zotero 快照、项目状态与回归输出
+.local/

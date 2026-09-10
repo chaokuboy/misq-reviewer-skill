@@ -1,5 +1,6 @@
 # MISQ 2025 两篇主编编者按提炼（DEI/全球包容 + 数字可持续）
 
+> 核验状态：旧版阅读蒸馏，尚未在本轮逐页比对原文。使用时遵守 `references/evidence.md`；其中强制措辞不能直接当期刊政策，须核验适用条件。
 > 出处标注：〔49:2〕= MISQ 49(2) 2025, Carter & Brown《Global by Design》;〔49:4〕= MISQ 49(4) 2025, Brown《Beyond Green IT》
 
 ### 1. 全球包容性 IS 学术立场（49:2）
